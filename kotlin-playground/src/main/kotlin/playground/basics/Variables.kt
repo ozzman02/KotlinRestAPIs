@@ -1,5 +1,8 @@
 package playground.basics
 
+import playground.toplevel.courseName
+import playground.toplevel.topLevelFunction
+
 fun main() {
     val name: String = "Oscar"
     println(name)
@@ -22,4 +25,7 @@ fun main() {
         DEF
     """.trimIndent()
     println(multiline1)
+
+    println(topLevelFunction())
+    println("Course name is $courseName")
 }
