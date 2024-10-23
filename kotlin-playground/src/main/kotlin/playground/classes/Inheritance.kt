@@ -8,6 +8,14 @@ open class User(val name: String) {
         println("Inside User Login")
     }
 
+    private fun secret() {
+        println("Inside User Secret")
+    }
+
+    protected open fun logout() {
+        println("Inside User Logout")
+    }
+
 }
 
 class Student(name: String): User(name) {
@@ -22,6 +30,11 @@ class Student(name: String): User(name) {
     override fun login() {
         println("Inside Student Login")
         super.login()
+    }
+
+    public override fun logout() {
+        super.logout()
+        println("Inside Student Logout")
     }
 }
 
@@ -42,6 +55,7 @@ fun main() {
     println("Logged in value is: ${student.isLoggedIn}")
     println("Country is: ${Student.country()}")
     println("NoOfEnrolledCourses is: ${Student.noOfEnrolledCourses}")
+    student.logout()
 
     println()
 
@@ -50,4 +64,8 @@ fun main() {
     instructor.login()
     instructor.isLoggedIn = true
     println("Logged in value is: ${instructor.isLoggedIn}")
+
+    println()
+
+    val user = User("Oscar")
 }
