@@ -1,6 +1,7 @@
 package com.kotlin.spring.controller
 
 import com.kotlin.spring.dto.CourseDTO
+import com.kotlin.spring.entity.Course
 import com.kotlin.spring.repository.CourseRepository
 import com.kotlin.spring.util.courseEntityList
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +36,6 @@ class CourseControllerIntgTest {
     @Test
     fun addCourseTest() {
         val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Dilip Sundarraj")
-
         val savedCourseDTO = webTestClient
             .post()
             .uri("/v1/courses")
@@ -45,7 +45,6 @@ class CourseControllerIntgTest {
             .expectBody(CourseDTO::class.java)
             .returnResult()
             .responseBody
-
         assertTrue { savedCourseDTO!!.id != null }
     }
 
@@ -61,4 +60,33 @@ class CourseControllerIntgTest {
             .responseBody
         assertEquals(3, courseDTOList!!.size)
     }
+
+    @Test
+    fun updateCourseTest() {
+        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development")
+        courseRepository.save(course)
+        val courseToUpdate = Course(null,"Build RestFul APis using SpringBoot and Kotlin1", "Development")
+        val updatedCourseDTO = webTestClient
+            .put()
+            .uri("/v1/courses/{courseId}", course.id)
+            .bodyValue(courseToUpdate)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+        assertEquals("Build RestFul APis using SpringBoot and Kotlin1", updatedCourseDTO!!.name)
+    }
+
+    @Test
+    fun deleteCourseTest() {
+        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development")
+        courseRepository.save(course)
+        webTestClient
+            .delete()
+            .uri("/v1/courses/{courseId}", course.id)
+            .exchange()
+            .expectStatus().isNoContent
+    }
+
 }
