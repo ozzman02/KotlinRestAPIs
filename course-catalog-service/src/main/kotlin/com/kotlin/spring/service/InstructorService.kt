@@ -6,6 +6,7 @@ import com.kotlin.spring.repository.InstructorRepository
 import mu.KLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class InstructorService(val instructorRepository: InstructorRepository) {
@@ -18,6 +19,11 @@ class InstructorService(val instructorRepository: InstructorRepository) {
         instructorRepository.save(instructorEntity)
         logger.info { "Saved instructor is: $instructorEntity" }
         return instructorEntity.let { InstructorDTO(it.id, it.name) }
+    }
+
+    @Transactional
+    fun findInstructorById(instructorId: Int): Optional<Instructor> {
+        return instructorRepository.findById(instructorId)
     }
 
 }

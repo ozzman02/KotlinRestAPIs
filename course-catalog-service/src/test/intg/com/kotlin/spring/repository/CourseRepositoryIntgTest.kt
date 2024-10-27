@@ -1,6 +1,7 @@
 package com.kotlin.spring.repository
 
 import com.kotlin.spring.util.courseEntityList
+import com.kotlin.spring.util.instructorEntity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -19,6 +20,9 @@ class CourseRepositoryIntgTest {
     @Autowired
     lateinit var courseRepository: CourseRepository
 
+    @Autowired
+    lateinit var instructorRepository: InstructorRepository
+
     companion object {
         @JvmStatic
         fun courseAndSize(): Stream<Arguments> {
@@ -29,7 +33,8 @@ class CourseRepositoryIntgTest {
     @BeforeEach
     fun setUp() {
         courseRepository.deleteAll()
-        courseRepository.saveAll(courseEntityList())
+        instructorRepository.deleteAll()
+        courseRepository.saveAll(courseEntityList(instructorRepository.save(instructorEntity())))
     }
 
     @Test

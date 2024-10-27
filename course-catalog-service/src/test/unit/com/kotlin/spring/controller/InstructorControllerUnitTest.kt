@@ -1,9 +1,7 @@
 package com.kotlin.spring.controller
 
-import com.kotlin.spring.dto.CourseDTO
 import com.kotlin.spring.dto.InstructorDTO
 import com.kotlin.spring.service.InstructorService
-import com.kotlin.spring.util.courseDTO
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.Test

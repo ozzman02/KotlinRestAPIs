@@ -3,22 +3,27 @@ package com.kotlin.spring.service
 import com.kotlin.spring.dto.CourseDTO
 import com.kotlin.spring.entity.Course
 import com.kotlin.spring.exception.CourseNotFoundException
+import com.kotlin.spring.exception.InstructorNotValidException
 import com.kotlin.spring.repository.CourseRepository
 import mu.KLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CourseService(val courseRepository: CourseRepository) {
+class CourseService(val courseRepository: CourseRepository, val instructorService: InstructorService) {
 
     companion object: KLogging()
 
     @Transactional
     fun addCourse(courseDTO: CourseDTO): CourseDTO {
-        val courseEntity = courseDTO.let { Course(null, it.name, it.category) }
-        val savedCourse = courseRepository.save(courseEntity)
-        logger.info { "Saved course is: $savedCourse" }
-        return savedCourse.let { CourseDTO(it.id, it.name, it.category) }
+        val instructorOptional = instructorService.findInstructorById(courseDTO.instructorId!!)
+        if (!instructorOptional.isPresent) {
+            throw InstructorNotValidException("Instructor with id ${courseDTO.instructorId} not valid")
+        }
+        val courseEntity = courseDTO.let { Course(null, it.name, it.category, instructorOptional.get()) }
+        courseRepository.save(courseEntity)
+        logger.info { "Saved course is: $courseEntity" }
+        return courseEntity.let { CourseDTO(it.id, it.name, it.category, it.instructor!!.id) }
     }
 
     @Transactional
@@ -26,7 +31,7 @@ class CourseService(val courseRepository: CourseRepository) {
         val courses = courseName?.let {
             courseRepository.findCoursesByName(courseName)
         } ?: courseRepository.findAll()
-        return  courses.map { CourseDTO(it.id, it.name, it.category) }
+        return  courses.map { CourseDTO(it.id, it.name, it.category, it.instructor!!.id) }
     }
 
     @Transactional
