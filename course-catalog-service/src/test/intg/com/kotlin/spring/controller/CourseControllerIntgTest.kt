@@ -78,7 +78,6 @@ class CourseControllerIntgTest {
         assertEquals(2, courseDTOList!!.size)
     }
 
-
     @Test
     fun updateCourseTest() {
         val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development")
