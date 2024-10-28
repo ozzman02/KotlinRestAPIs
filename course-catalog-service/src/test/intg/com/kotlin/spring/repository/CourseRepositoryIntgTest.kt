@@ -1,5 +1,6 @@
 package com.kotlin.spring.repository
 
+import com.kotlin.spring.db.PostgreSQLContainerInitializer
 import com.kotlin.spring.util.courseEntityList
 import com.kotlin.spring.util.instructorEntity
 import org.junit.jupiter.api.BeforeEach
@@ -8,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
 import java.util.stream.Stream
@@ -15,7 +17,8 @@ import kotlin.test.assertEquals
 
 @DataJpaTest
 @ActiveProfiles("test")
-class CourseRepositoryIntgTest {
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+class CourseRepositoryIntgTest: PostgreSQLContainerInitializer() {
 
     @Autowired
     lateinit var courseRepository: CourseRepository

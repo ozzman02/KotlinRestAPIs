@@ -8,6 +8,7 @@ plugins {
 
 group = "com.kotlin.spring"
 version = "0.0.1-SNAPSHOT"
+extra["testcontainersVersion"] = "1.16.2"
 
 java {
 	toolchain {
@@ -17,6 +18,12 @@ java {
 
 repositories {
 	mavenCentral()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
+	}
 }
 
 dependencies {
@@ -34,6 +41,9 @@ dependencies {
 	testImplementation("io.mockk:mockk:1.10.4")
 	testImplementation("com.ninja-squad:springmockk:3.0.1")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation("org.testcontainers:junit-jupiter")
+	testImplementation("org.testcontainers:postgresql")
+
 }
 
 kotlin {

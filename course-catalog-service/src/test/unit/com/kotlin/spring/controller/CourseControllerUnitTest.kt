@@ -1,7 +1,6 @@
 package com.kotlin.spring.controller
 
 import com.kotlin.spring.dto.CourseDTO
-import com.kotlin.spring.entity.Course
 import com.kotlin.spring.service.CourseService
 import com.kotlin.spring.util.courseDTO
 import com.ninjasquad.springmockk.MockkBean

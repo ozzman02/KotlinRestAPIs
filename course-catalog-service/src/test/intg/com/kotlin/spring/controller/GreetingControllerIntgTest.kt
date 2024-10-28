@@ -1,8 +1,10 @@
 package com.kotlin.spring.controller
 
+import com.kotlin.spring.db.PostgreSQLContainerInitializer
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -11,7 +13,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
-class GreetingControllerIntgTest {
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+class GreetingControllerIntgTest: PostgreSQLContainerInitializer() {
 
     @Autowired
     lateinit var webTestClient: WebTestClient
@@ -28,7 +31,7 @@ class GreetingControllerIntgTest {
             .expectBody(String::class.java)
             .returnResult()
 
-        Assertions.assertEquals("$name, Hello from default profile", result.responseBody)
+        Assertions.assertEquals("$name, Hello from test profile", result.responseBody)
     }
 
 }
